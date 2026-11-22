@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Teddybear's Revenge - the assembly, annotated</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+  :root{--bg:#fff;--fg:#1d1d22;--mut:#666;--ac:#c4155a;--code:#f3f3f6;--bd:#d8d8e0}
+  @media (prefers-color-scheme:dark){:root{--bg:#0b0b10;--fg:#d8d8e0;--mut:#9a9aa8;--ac:#ff6a9a;--code:#17171f;--bd:#33333f}}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:62rem;padding:0 16px;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,sans-serif}
+  #wunav{display:flex;gap:16px;flex-wrap:wrap;padding-top:12px;padding-bottom:8px;border-bottom:1px solid var(--bd);font-size:14px}
+  a{color:var(--ac)}
+  h1,h2,h3,h4{line-height:1.25;margin-top:1.8em}
+  img{max-width:100%;height:auto;image-rendering:auto}
+  pre{background:var(--code);border:1px solid var(--bd);border-radius:4px;padding:10px 12px;overflow-x:auto;font-size:13px;line-height:1.4}
+  code{background:var(--code);padding:1px 4px;border-radius:3px;font-size:.92em;overflow-wrap:anywhere}
+  pre code{background:none;padding:0;overflow-wrap:normal}
+  table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%}
+  td,th{border:1px solid var(--bd);padding:4px 8px}
+  blockquote{border-left:3px solid var(--bd);margin-left:0;padding-left:14px;color:var(--mut)}
+  #TOC{font-size:14px}#TOC ul{padding-left:1.2em}
+  #TOC>ul{padding-left:0;list-style:none}
+  details#toc-box{margin:12px 0}
+  </style>
+</head>
+<body>
+<nav id="wunav"><a href="../index.html">&larr; the demo</a> <a href="WRITEUP-asm.html">asm</a> <a href="WRITEUP-effects.html">effects</a> <a href="https://github.com/kassoulet/Teddy_Bears_Revenge_by_Eclipse">README on GitHub</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#teddybears-revenge---the-assembly-annotated"
+id="toc-teddybears-revenge---the-assembly-annotated">Teddybear's Revenge
+- the assembly, annotated</a>
+<ul>
+<li><a href="#frame-loop-and-self-modifying-code"
+id="toc-frame-loop-and-self-modifying-code">Frame loop and
+self-modifying code</a></li>
+<li><a href="#rotozoom-rotozoomasm-do_rotozoom"
+id="toc-rotozoom-rotozoomasm-do_rotozoom">Rotozoom
+(<code>rotozoom.asm</code>, <code>Do_RotoZoom</code>)</a></li>
+<li><a href="#sine-tables-and-fistp-rounding"
+id="toc-sine-tables-and-fistp-rounding">Sine tables and fistp
+rounding</a></li>
+<li><a href="#3d-engine-rotate_normal-3dkernelasm"
+id="toc-3d-engine-rotate_normal-3dkernelasm">3D engine: Rotate_Normal
+(<code>3dkernel.asm</code>)</a></li>
+<li><a href="#glenz-filler-fillglenasm"
+id="toc-glenz-filler-fillglenasm">Glenz filler
+(<code>fillglen.asm</code>)</a></li>
+<li><a href="#phong-environment-map"
+id="toc-phong-environment-map">Phong environment map</a></li>
+<li><a href="#lines-lineasm" id="toc-lines-lineasm">Lines
+(<code>line.asm</code>)</a></li>
+<li><a href="#bitmap-warp-bitmapasm"
+id="toc-bitmap-warp-bitmapasm">Bitmap warp
+(<code>bitmap.asm</code>)</a></li>
+<li><a href="#tunnel-tunnelasm-prg_tube"
+id="toc-tunnel-tunnelasm-prg_tube">Tunnel (<code>tunnel.asm</code>,
+<code>Prg_Tube</code>)</a></li>
+<li><a href="#things-that-bite-when-porting"
+id="toc-things-that-bite-when-porting">Things that bite when
+porting</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="teddybears-revenge---the-assembly-annotated">Teddybear's Revenge
+- the assembly, annotated</h1>
+<p>The 1996 demo is 32-bit protected-mode NASM (about 8800 lines in
+<code>src/asm/teddy/</code>) running on a flat 320x200 VGA buffer. This
+note collects the code that does the actual work, with the matching
+JavaScript. Everything below was read from the source and verified frame
+by frame against the assembly running under Unicorn (see README).</p>
+<h2 id="frame-loop-and-self-modifying-code">Frame loop and
+self-modifying code</h2>
+<p>Every effect is a loop of <code>Screen_Swap</code> (copy the hidden
+page to VRAM), draw into the hidden page, <code>Wait_Vbl_Teddy</code>.
+The routines are tuned with <strong>self-modifying code</strong>:
+constants are patched into the immediate operands of instructions before
+the hot loop (<code>Compt_11 equ $</code> labels sit right after an
+opcode, and <code>[Compt_11+3]</code> writes the displacement). In
+JavaScript these become plain local variables.</p>
+<p>The hidden page has 200 lines of margin above it
+(<code>Min_Y=200 .. Max_Y=399</code> internal coordinates), so fillers
+can draw above the top without clipping logic; <code>Screen_Swap</code>
+clears 30 lines above and below before copying. The port keeps this
+layout (<code>HP = 320*200</code> inside one memory array).</p>
+<h2 id="rotozoom-rotozoomasm-do_rotozoom">Rotozoom
+(<code>rotozoom.asm</code>, <code>Do_RotoZoom</code>)</h2>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">eax</span><span class="op">,</span> <span class="op">[</span>CoSinus<span class="op">+</span><span class="dv">4</span><span class="op">*</span><span class="kw">ebx</span><span class="op">]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">imul</span>    <span class="kw">eax</span><span class="op">,</span> <span class="op">[</span>Rayon<span class="op">]</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">sar</span>     <span class="kw">eax</span><span class="op">,</span> <span class="dv">10</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="op">[</span>Vect1_X<span class="op">],</span> <span class="kw">eax</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">.Ok0:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Addr_Vect1_X1 <span class="dt">equ</span> <span class="op">$</span>                             <span class="co">; label dword</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">edx</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span>     <span class="kw">ebx</span><span class="op">,</span> <span class="bn">0x1F3F</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">ecx</span><span class="op">,</span> <span class="kw">ebp</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Addr_Mapping1 <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">al</span><span class="op">,</span> <span class="op">[</span><span class="kw">ebx</span><span class="op">+</span><span class="bn">0x12345678</span><span class="op">]</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">bl</span><span class="op">,</span> <span class="kw">dh</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">ah</span><span class="op">,</span> <span class="kw">al</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">bh</span><span class="op">,</span> <span class="kw">ch</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="op">[</span><span class="kw">edi</span><span class="op">],</span> <span class="kw">ax</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="op">[</span><span class="kw">edi</span><span class="op">+</span><span class="dv">320</span><span class="op">],</span> <span class="kw">ax</span></span></code></pre></div>
+<p>The texture lookup index is built from the high bytes of two 16.16
+accumulators: <code>bl = dh</code> (u) and <code>bh = ch</code> (v),
+masked with <code>0x1F3F</code> (a 64x32 tile). One texel is written as
+a 2x2 block (<code>mov ah, al</code> and two word stores), so the effect
+really computes 160x100 samples. The loop advances along a row by
+<code>Vect1</code>, and to the next line by <code>Vect2</code> (the
+perpendicular vector, <code>angle+511</code> = +90 degrees in a
+2048-step circle).</p>
+<h2 id="sine-tables-and-fistp-rounding">Sine tables and fistp
+rounding</h2>
+<p><code>Init_Sinus</code> fills <code>Sinus</code> with
+<code>1024*sin(2*pi*i/2048)</code> using <code>fistp</code>, i.e.
+round-to-nearest-even. JS has no such rounding, so <code>core.js</code>
+has <code>rne()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> rne <span class="op">=</span> x <span class="kw">=&gt;</span> { <span class="kw">const</span> r <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(x)<span class="op">;</span> <span class="cf">return</span> (<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(x <span class="op">%</span> <span class="dv">1</span>) <span class="op">===</span> <span class="fl">0.5</span> <span class="op">&amp;&amp;</span> r <span class="op">%</span> <span class="dv">2</span>) <span class="op">?</span> r <span class="op">-</span> <span class="dv">1</span> <span class="op">:</span> r<span class="op">;</span> }<span class="op">;</span></span></code></pre></div>
+<p><code>Sinus2</code> (amplitude 64) sits right after
+<code>CoSinus</code> and overlays the tail of the 3072-entry table, a
+detail the port reproduces with <code>Sinus.set(...)</code>.</p>
+<h2 id="3d-engine-rotate_normal-3dkernelasm">3D engine: Rotate_Normal
+(<code>3dkernel.asm</code>)</h2>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cosinus_x_cosinus_y <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">imul</span>    <span class="kw">eax</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cosinus_z_sinus_x <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">imul</span>    <span class="kw">ebx</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">eax</span><span class="op">,</span> <span class="kw">edx</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">ebx</span><span class="op">,</span> <span class="kw">edi</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">ecx</span><span class="op">,</span> <span class="kw">ebp</span></span></code></pre></div>
+<p>The nine rotation coefficients (products of sine/cosine of three
+Euler angles, scaled) are patched into the <code>imul</code> immediates
+once per object per frame. Points are then rotated with plain integer
+math and the projected X, Y are <strong>packed in one dword</strong>
+<code>(X&lt;&lt;16)|(Y&amp;0xFFFF)</code>, so later code compares or
+sorts two coordinates with one instruction. Shifts and the no-divide
+path are replicated bit for bit; a single wrong <code>sar</code> gives
+visible shimmer in the diff.</p>
+<p>Faces are sorted by depth with a Lomuto-like quicksort; the port
+ports it exactly, since ties between equal depths change which face is
+painted last.</p>
+<h2 id="glenz-filler-fillglenasm">Glenz filler
+(<code>fillglen.asm</code>)</h2>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Boucle_Glenz:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">push</span>    <span class="kw">edx</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">di</span><span class="op">,</span> <span class="kw">si</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">cx</span><span class="op">,</span> <span class="kw">bx</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">edi</span><span class="op">,</span> <span class="kw">ebp</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">sub</span>     <span class="kw">cx</span><span class="op">,</span> <span class="kw">si</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">jle</span>     <span class="fu">.Ok105</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">.Ok103:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span>      <span class="op">[</span><span class="kw">edi</span><span class="op">],</span> <span class="kw">ax</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">edi</span><span class="op">,</span> <span class="dv">2</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">dec</span>     <span class="kw">ecx</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">jne</span>     <span class="fu">.Ok103</span></span></code></pre></div>
+<p>The "glenz" (transparent glass) look is not a blend: the pixels are
+OR-ed into the buffer. With a palette where colour bits are laid out so
+that OR produces the intended overlay colour, overlapping faces light up
+automatically. Edges are walked with 16.16 coefficients,
+<code>add esi, Coef_1; adc ebx, Coef_2; adc esi, 0</code> (two edges
+advanced in one carry chain). Spans are written 2 bytes at a time with
+an alignment fix-up.</p>
+<p>A quirk worth documenting: in the bottom-clip path of the non-flat
+case the code <strong>adds</strong> <code>(y3 - Max_Y)</code> to the row
+count instead of subtracting it:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>        <span class="kw">cmp</span>     <span class="dt">word</span> <span class="op">[</span>y3<span class="op">],</span> Max_Y</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">jle</span>     <span class="fu">.Ok26</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">push</span>    <span class="kw">ecx</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">cx</span><span class="op">,</span> Max_Y</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">sub</span>     <span class="kw">cx</span><span class="op">,</span> <span class="op">[</span>y3<span class="op">]</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">sub</span>     <span class="kw">dx</span><span class="op">,</span> <span class="kw">cx</span>          <span class="co">; dx -= (Max_Y - y3), i.e. dx += (y3 - Max_Y)</span></span></code></pre></div>
+<p>That draws extra rows under the object (hidden by the margin), but it
+matters at the screen edge. The flat-top path subtracts correctly. The
+JS keeps both behaviours.</p>
+<h2 id="phong-environment-map">Phong environment map</h2>
+<p><code>Create_Circle_Phong</code> builds a 256-colour disc (an
+environment map) once with x87 math; <code>Init_Phong</code> precomputes
+per-point normals. Per frame, <code>Rotate_Phong</code> rotates the
+normals and <code>Fill_Phong</code> (<code>fillmap.asm</code>)
+interpolates texture coordinates across each triangle (the code packs U
+and V in the two halves of a dword, as with X/Y). The disc is evaluated
+in JS doubles and matches the oracle exactly.</p>
+<h2 id="lines-lineasm">Lines (<code>line.asm</code>)</h2>
+<p>A classic Cohen-Sutherland clipper followed by Bresenham, with the
+credit text drawn as rotating 3D points projected to the screen. Lines
+are ported one to one.</p>
+<h2 id="bitmap-warp-bitmapasm">Bitmap warp
+(<code>bitmap.asm</code>)</h2>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Make_Table_:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">eax</span><span class="op">,</span> <span class="op">[</span>Sinus<span class="op">+</span><span class="dv">4</span><span class="op">*</span><span class="kw">edx</span><span class="op">]</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">ebx</span><span class="op">,</span> <span class="op">[</span>CoSinus<span class="op">+</span><span class="dv">4</span><span class="op">*</span><span class="kw">ebp</span><span class="op">]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Amplitude_X <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">imul</span>    <span class="kw">eax</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>Amplitude_Y <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">imul</span>    <span class="kw">ebx</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">eax</span><span class="op">,</span> <span class="kw">ebx</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">shr</span>     <span class="kw">eax</span><span class="op">,</span> <span class="dv">8</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">shr</span>     <span class="kw">ebx</span><span class="op">,</span> <span class="dv">8</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">ah</span><span class="op">,</span> <span class="kw">bl</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="op">[</span><span class="kw">esi</span><span class="op">],</span> <span class="kw">ax</span></span></code></pre></div>
+<p><code>Init_Cir</code> builds a polar table (<code>Y</code> in
+-50..49, <code>X</code> in -80..79) once; each frame
+<code>Make_Table_</code> builds a 256-entry table of (dx, dy) word
+offsets from two sine sweeps and the current amplitudes, and the bitmap
+lookup adds those offsets to the polar table. <code>shr</code> is
+logical and <code>imul</code> wraps in 32 bits: the JS uses
+<code>&gt;&gt;&gt;</code> and <code>Math.imul</code> to match. The 64x64
+texture (<code>MAP3</code>) is stored 4x4-tiled and the result is
+doubled to 320x200.</p>
+<h2 id="tunnel-tunnelasm-prg_tube">Tunnel (<code>tunnel.asm</code>,
+<code>Prg_Tube</code>)</h2>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.Ok1:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">dx</span><span class="op">,</span> <span class="op">[</span><span class="kw">esi</span><span class="op">+</span><span class="dv">2</span><span class="op">+</span><span class="kw">ebx</span><span class="op">]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">shld</span>    <span class="kw">ebp</span><span class="op">,</span> <span class="kw">edx</span><span class="op">,</span> <span class="dv">26</span>            <span class="co">; ebp = (map word &gt;&gt; 6) (low bits)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Compt_Sin1 <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">ebp</span><span class="op">,</span> <span class="bn">0x12345678</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span>     <span class="kw">ebp</span><span class="op">,</span> <span class="bn">0x7FF</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">ecx</span><span class="op">,</span> <span class="kw">edx</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">cx</span><span class="op">,</span> <span class="dt">word</span> <span class="op">[</span><span class="kw">cs</span><span class="op">:</span>Sinus2<span class="op">+</span><span class="dv">4</span><span class="op">*</span><span class="kw">ebp</span><span class="op">]</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span>     <span class="kw">edx</span><span class="op">,</span> <span class="bn">0x3F3F</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span>     <span class="kw">ecx</span><span class="op">,</span> <span class="bn">0x3F3F</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>Compt_1 <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">mov</span>     <span class="kw">ah</span><span class="op">,</span> <span class="op">[</span><span class="kw">ebx</span><span class="op">+</span><span class="kw">edx</span><span class="op">+</span><span class="bn">0x12345678</span><span class="op">]</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>Compt_11 <span class="dt">equ</span> <span class="op">$</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">add</span>     <span class="kw">ah</span><span class="op">,</span> <span class="op">[</span><span class="kw">ebx</span><span class="op">+</span><span class="kw">ecx</span><span class="op">+</span><span class="bn">0x12345678</span><span class="op">]</span></span></code></pre></div>
+<p>The map is 320x200 words: high byte = distance code, low byte = angle
+code, built in <code>Init_Tube</code> as
+<code>round(4800/sqrt(x^2 + y^2/0.8))</code> and
+<code>round(atan2(y,x)*128/pi)</code>. Two cells are processed per
+iteration and each output pixel is the <strong>sum of two texture
+samples</strong>: one at the map position, one displaced by a sine
+wobble. <code>Compt</code>/<code>Compt2</code> scroll the two lookups in
+opposite directions (<code>-256</code> and <code>+512</code> per vsync).
+Distances above 300 would overflow the texture and become holes: they
+are collected in <code>Tbl_Zero</code> and <code>Erase_Trou</code>
+paints them (and the centre) with colour 144 afterwards. The hole list
+has a classic off-by-one: its last entry is overwritten with the centre
+pixel and entry 0 is never read; both are reproduced.</p>
+<p>The JS inner loop:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> o <span class="op">=</span> HP<span class="op">;</span> k <span class="op">&lt;</span> <span class="dv">32000</span><span class="op">;</span> k<span class="op">++,</span> o <span class="op">+=</span> <span class="dv">2</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> v <span class="op">=</span> map[<span class="dv">2</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span>]<span class="op">,</span> e <span class="op">=</span> (((v <span class="op">&gt;&gt;&gt;</span> <span class="dv">6</span>) <span class="op">+</span> S<span class="op">.</span><span class="at">sin</span>) <span class="op">&amp;</span> <span class="bn">0x7FF</span>)<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> c <span class="op">=</span> (v <span class="op">+</span> Sinus2[e]) <span class="op">&amp;</span> <span class="bn">0x3F3F</span><span class="op">;</span> v <span class="op">&amp;=</span> <span class="bn">0x3F3F</span><span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> hi <span class="op">=</span> (pic[v <span class="op">+</span> d1] <span class="op">+</span> pic[c <span class="op">+</span> d11]) <span class="op">&amp;</span> <span class="dv">255</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="things-that-bite-when-porting">Things that bite when
+porting</h2>
+<ul>
+<li><code>fistp</code> rounds to nearest even; JS
+<code>Math.round</code> rounds .5 up.</li>
+<li><code>imul</code> with a 32-bit result wraps; use
+<code>Math.imul</code>.</li>
+<li><code>shr</code> versus <code>sar</code>, and 16-bit register parts:
+mixing <code>ax</code> and <code>eax</code> leaves the upper half
+untouched (e.g. <code>mov bp, ax</code> after
+<code>xor ebp, ebp</code>).</li>
+<li><code>Centre_X</code> is <code>(Max_X-Min_X)/2 = 159</code>, not
+160.</li>
+<li>Self-modified immediates: the value in effect is the one written
+last before the loop runs, which is not always the constant in the
+source.</li>
+<li>A palette array shorter than 768 bytes read by
+<code>Set_Palette</code> aliases the next variables.</li>
+</ul>
+</body>
+</html>

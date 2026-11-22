@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Teddybear's Revenge - the effects</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+  :root{--bg:#fff;--fg:#1d1d22;--mut:#666;--ac:#c4155a;--code:#f3f3f6;--bd:#d8d8e0}
+  @media (prefers-color-scheme:dark){:root{--bg:#0b0b10;--fg:#d8d8e0;--mut:#9a9aa8;--ac:#ff6a9a;--code:#17171f;--bd:#33333f}}
+  *{box-sizing:border-box}
+  body{margin:0 auto;max-width:62rem;padding:0 16px;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,sans-serif}
+  #wunav{display:flex;gap:16px;flex-wrap:wrap;padding-top:12px;padding-bottom:8px;border-bottom:1px solid var(--bd);font-size:14px}
+  a{color:var(--ac)}
+  h1,h2,h3,h4{line-height:1.25;margin-top:1.8em}
+  img{max-width:100%;height:auto;image-rendering:auto}
+  pre{background:var(--code);border:1px solid var(--bd);border-radius:4px;padding:10px 12px;overflow-x:auto;font-size:13px;line-height:1.4}
+  code{background:var(--code);padding:1px 4px;border-radius:3px;font-size:.92em;overflow-wrap:anywhere}
+  pre code{background:none;padding:0;overflow-wrap:normal}
+  table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%}
+  td,th{border:1px solid var(--bd);padding:4px 8px}
+  blockquote{border-left:3px solid var(--bd);margin-left:0;padding-left:14px;color:var(--mut)}
+  #TOC{font-size:14px}#TOC ul{padding-left:1.2em}
+  #TOC>ul{padding-left:0;list-style:none}
+  details#toc-box{margin:12px 0}
+  </style>
+</head>
+<body>
+<nav id="wunav"><a href="../index.html">&larr; the demo</a> <a href="WRITEUP-asm.html">asm</a> <a href="WRITEUP-effects.html">effects</a> <a href="https://github.com/kassoulet/Teddy_Bears_Revenge_by_Eclipse">README on GitHub</a></nav>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#teddybears-revenge---the-effects"
+id="toc-teddybears-revenge---the-effects">Teddybear's Revenge - the
+effects</a>
+<ul>
+<li><a href="#0-rotozoom-with-typewriter-text"
+id="toc-0-rotozoom-with-typewriter-text">0. Rotozoom with typewriter
+text</a></li>
+<li><a href="#1-intro" id="toc-1-intro">1. Intro</a></li>
+<li><a href="#2-3d-glenz-bears" id="toc-2-3d-glenz-bears">2. 3D glenz
+bears</a></li>
+<li><a href="#3-lines-and-credits" id="toc-3-lines-and-credits">3. Lines
+and credits</a></li>
+<li><a href="#4-6-8-bitmap-warp" id="toc-4-6-8-bitmap-warp">4, 6, 8.
+Bitmap warp</a></li>
+<li><a href="#5-3d-phong-bears" id="toc-5-3d-phong-bears">5. 3D phong
+bears</a></li>
+<li><a href="#7-tunnel" id="toc-7-tunnel">7. Tunnel</a></li>
+<li><a href="#9-end" id="toc-9-end">9. End</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="teddybears-revenge---the-effects">Teddybear's Revenge - the
+effects</h1>
+<p>The demo runs at 70 Hz in VGA mode 13h (320x200, 256 colours, shown
+on a 4:3 monitor). The music, a 4-channel MOD, drives the schedule: the
+demo reads the module's <code>order</code> and compares it with a target
+to decide when the next part starts. The port derives the same schedule
+from libopenmpt (<code>web/timeline.js</code>).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Effect</th>
+<th>Starts at (music)</th>
+<th>Ends when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Rotozoom with typewriter text</td>
+<td>0:00</td>
+<td>order 4 (<code>ax &gt;= 0x400</code>)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Intro: big bear and logo over snow</td>
+<td>0:14</td>
+<td>its own zoom/flash sequence (counter)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3D glenz bears</td>
+<td>0:20</td>
+<td>order 0x0A</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Lines and credits</td>
+<td>0:33</td>
+<td>order 0x10</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bitmap warp</td>
+<td>0:52</td>
+<td>order 0x11</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3D phong bears</td>
+<td>0:55</td>
+<td>order 0x15</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Bitmap warp (second)</td>
+<td>1:07</td>
+<td>order 0x16</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Tunnel</td>
+<td>1:11</td>
+<td>order 0x1A</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Bitmap warp (third)</td>
+<td>1:23</td>
+<td>order 0x1B</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Rotozoom, ending in a fade</td>
+<td>1:27</td>
+<td>order 0x21 or the end of the palette fade, whichever comes first
+(the fade does)</td>
+</tr>
+</tbody>
+</table>
+<p>(Times are approximate display values: the player shows the exact
+ones on the effect buttons.)</p>
+<h2 id="0-rotozoom-with-typewriter-text">0. Rotozoom with typewriter
+text</h2>
+<p>A 64x32 tile is rotated and zoomed: two orthogonal vectors
+(<code>Vect1</code>, <code>Vect2</code>, rotated by <code>Angle</code>
+with the sine table) step across the texture per pixel and per line.
+Resolution is halved (each sample is a 2x2 block). On top, a wobbling
+typewriter text (the message letters are blitted from the demo font with
+a vertical sine offset, <code>Do_Intro_Text</code>) appears line by
+line, changing on a counter driven by the music order. The same routine
+runs again at the end with a flag that makes the palette fade out once
+the music reaches order 0x1F.</p>
+<h2 id="1-intro">1. Intro</h2>
+<p>A big teddy bear picture (143x150) on a plain field is zoomed with a
+lookup that changes scale every frame, then crossfades into the TBR
+logo. Behind everything is animated snow (a 4-page noise cycle). The
+palette is flashed to white at the transition (<code>Init_Flash</code>:
+every colour starts at 0x3F, then steps down by 8 per frame toward the
+target palette).</p>
+<h2 id="2-3d-glenz-bears">2. 3D glenz bears</h2>
+<p>Twelve copies of the bear object, each rotating with its own phase,
+are drawn as transparent faces: pixels are OR-ed into the hidden page,
+so overlapping triangles brighten into new colours. A flat shadow object
+(the same mesh squashed, drawn with a dark colour) lies below, and
+cloned objects trail with a delayed angle table. The background is the
+intro snow, darkened. Faces are depth-sorted every frame.</p>
+<h2 id="3-lines-and-credits">3. Lines and credits</h2>
+<p>A rotating cloud of 3D points joined by clipped lines
+(Cohen-Sutherland, then Bresenham), with a white flash entering the
+effect. The credits (code, art, music, fonts) appear as 3D text that
+drifts in along Z; a screen shake ("sport") hits at order 10, row
+60.</p>
+<h2 id="4-6-8-bitmap-warp">4, 6, 8. Bitmap warp</h2>
+<p>A 64x64 texture (<code>MAP3</code>) shown through a polar distortion:
+a table of (dx, dy) offsets per radius step is regenerated every frame
+from two sine sweeps with changing amplitude and phase. The result is a
+pulsing lens/swirl. The three passes differ in speed and amplitude
+parameters (<code>prgBitmap(wait, v0, v1)</code>), and flash the palette
+at fixed music rows.</p>
+<h2 id="5-3d-phong-bears">5. 3D phong bears</h2>
+<p>Same mesh family as the glenz part, but shaded: each vertex normal is
+rotated every frame and used as a coordinate into a precomputed
+environment disc (<code>Create_Circle_Phong</code>), so surfaces look
+chrome-like. Seven camera-style objects are the same mesh with axes
+swapped, sharing the rotation, and the object distance follows the music
+(<code>update3d2</code>). This part uses the opposite face-visibility
+test from the glenz part (<code>jle</code> instead of
+<code>jge</code>).</p>
+<h2 id="7-tunnel">7. Tunnel</h2>
+<p>A 320x200 map of (distance, angle) per pixel is precomputed (distance
+<code>4800/sqrt(x^2+y^2/0.8)</code>, angle <code>atan2*128/pi</code>).
+Each frame the map is used to look up a 256x128 texture twice, with a
+sine wobble on the second lookup, and the two values are added modulo
+256. The two lookups scroll in opposite directions, which makes the
+walls appear to rotate and drift. The centre, where the distance
+overflows, is covered by a patch of colour 144.</p>
+<h2 id="9-end">9. End</h2>
+<p>The rotozoom returns with the end flag. From order 0x1F the palette
+is decremented every other frame; after 126 frames everything is black
+and the demo exits.</p>
+</body>
+</html>
